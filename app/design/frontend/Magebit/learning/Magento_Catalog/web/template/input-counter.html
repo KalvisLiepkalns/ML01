@@ -1,0 +1,51 @@
+<div class="qty-container">
+    <button data-bind="click: decreaseQty">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="10"
+            height="2"
+            viewBox="0 0 10 2"
+        >
+            <rect
+                fill="#333"
+                class="a"
+                width="2"
+                height="10"
+                transform="translate(10) rotate(90)"
+            />
+        </svg>
+    </button>
+    <input
+        type="number"
+        name="qty"
+        id="qty"
+        maxlength="12"
+        class="qty"
+        data-bind="value: qty, valueUpdate: 'input', event: { change: validateNumber }"
+    />
+    <button data-bind="click: increaseQty">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+        >
+            <g transform="translate(-1145 -649)">
+                <rect
+                    fill="#ff5501"
+                    class="a"
+                    width="2"
+                    height="10"
+                    transform="translate(1149 649)"
+                />
+                <rect
+                    fill="#ff5501"
+                    class="a"
+                    width="2"
+                    height="10"
+                    transform="translate(1155 653) rotate(90)"
+                />
+            </g>
+        </svg>
+    </button>
+</div>

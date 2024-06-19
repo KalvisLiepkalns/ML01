@@ -1,0 +1,11 @@
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="simple_widget" class="MageMastery\FirstWidget\Block\Widget\SimpleWidget">
+        <label>Simple Widget</label>
+        <description>Description of the Simple Widget</description>
+        <parameters>
+            <parameter name="yes_no" xsi:type="select" visible="true" required="true" source_model="MageMastery\FirstWidget\Model\Config\Source\YesNo">
+                <label>Yes/No</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

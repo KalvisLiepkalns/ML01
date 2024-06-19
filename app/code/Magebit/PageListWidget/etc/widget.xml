@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<widgets
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd"
+>
+    <widget id="magebit_pagelistwidget_pagelist" class="Magebit\PageListWidget\Block\Widget\PageList">
+        <label>Page List Widget</label>
+        <description>Page List Widget to show relevent CMS Pages</description>
+
+        <parameters>
+            <parameter name="title" xsi:type="text" required="false" visible="true">
+                <label>Title</label>
+            </parameter>
+
+            <parameter
+                name="display_mode"
+                xsi:type="select"
+                required="true"
+                visible="true"
+                source_model="Magebit\PageListWidget\Model\Config\Source\DisplayMode">
+                <label>Display Mode</label>
+            </parameter>
+
+            <parameter name="selected_pages" xsi:type="multiselect" required="true" visible="true" source_model="Magebit\PageListWidget\Model\Config\Source\CmsPages">
+                <label>Selected pages</label>
+
+                <depends>
+                    <parameter name="display_mode" value="1"></parameter>
+                </depends>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

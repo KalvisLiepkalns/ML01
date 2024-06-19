@@ -1,0 +1,70 @@
+<?php
+
+$_product = $block->getProduct();
+$stock = $_product->getExtensionAttributes()->getStockItem()->getQty();
+$buttonTitle = "Add to Cart";
+
+// dd($block)
+
+?>
+<div id="qty-id" data-bind="scope: 'qty-counter'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <?php if ($block->displayProductStockStatus()): ?>
+        <?php if ($_product->isAvailable()): ?>
+            <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                <span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="11"
+                        height="8.005"
+                        viewBox="0 0 11 8.005"
+                    >
+                        <g transform="translate(-32.369 -34.185)">
+                            <path
+                                fill= "#575757"
+                                class="a"
+                                d="M43.324,35.378,36.5,42.145a.156.156,0,0,1-.218,0L32.413,38.3a.152.152,0,0,1,0-.215l.941-.933a.155.155,0,0,1,.217,0l2.823,2.8,5.771-5.725a.154.154,0,0,1,.218,0l.941.933A.152.152,0,0,1,43.324,35.378Z"
+                                transform="translate(0 0)"
+                            />
+                        </g>
+                    </svg>
+
+                    <?= /* @escapeNotVerified */ __('In stock') ?>
+                </span>
+            </div>
+            <p><?php echo __($stock)?> items available</p>
+        <?php else: ?>
+            <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<div class="actions cart">
+    <button
+        type="submit"
+        title="<?= /* @escapeNotVerified */ $buttonTitle ?>"
+        class="action primary tocart cart-button"
+        id="product-addtocart-button"
+    >
+        <span><?= /* @escapeNotVerified */ $buttonTitle ?></span>
+    </button>
+    <?= $block->getChildHtml('', true) ?>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "#qty-id": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "qty-counter": {
+                        "component": "qtyCounter",
+                        "qty": "1",
+                        "maxQty": <?= /* @noEscape */ $stock ?>
+                    }
+                }
+            }
+        }
+    }
+</script>
