@@ -4,8 +4,6 @@ $_product = $block->getProduct();
 $stock = $_product->getExtensionAttributes()->getStockItem()->getQty();
 $buttonTitle = "Add to Cart";
 
-// dd($block)
-
 ?>
 <div id="qty-id" data-bind="scope: 'qty-counter'">
     <!-- ko template: getTemplate() --><!-- /ko -->

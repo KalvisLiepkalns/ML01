@@ -48,7 +48,7 @@ class ProductAttributeFilter extends AbstractHelper
      *
      * @return null|Interceptor
      */
-    private function getValidAttribute(Product $product, array $filteredAttributes):null|Interceptor
+    private function getValidAttribute(Product $product, array $filteredAttributes): null|Interceptor
     {
 
         $otherAttributes = $this->attributeCollection->create();
@@ -93,7 +93,8 @@ class ProductAttributeFilter extends AbstractHelper
      * Gets the current id by taking it from the path info.
      * @return int
      */
-    private function getCurrentProductId() {
+    private function getCurrentProductId(): int
+    {
         // Might not be the best, but it's one idea that came to my mind
         return intval($this->request->getParam("id"));
     }
@@ -103,9 +104,24 @@ class ProductAttributeFilter extends AbstractHelper
      * @return ProductInterface
      * @throws NoSuchEntityException
      */
-    public function getProduct()
+    public function getProduct(): ProductInterface
     {
         return $this->productRepository->getById($this->getCurrentProductId());
+    }
+
+    /**
+     * Gets the description of ``$product`` till it reaches the first dot.
+     * @param Product $product
+     * @return string
+     */
+    public function getDescription(Product $product): string
+    {
+        /*
+         * Wasn't required, but by guessing the design, the short description starts from first tag and till the first "."
+         */
+        $description = explode("\n", $product->getDescription())[0];
+        $description = strip_tags($description);
+        return explode(".",$description)[0] . ".";
     }
 
 }

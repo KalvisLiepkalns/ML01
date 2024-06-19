@@ -10,8 +10,9 @@ $attributes = $this->helper(ProductAttributeFilter::class);
 /** @var Product $product */
 $product = $attributes->getProduct();
 
-$productShortDescription = $product->getShortDescription();
+$productDescription = $product->getShortDescription() ? : $attributes->getDescription($product);
 $attributeList = $attributes->getFilteredAttributes($product);
+
 
 ?>
 
@@ -25,5 +26,5 @@ $attributeList = $attributes->getFilteredAttributes($product);
             </li>
         <?php endforeach; ?>
     </ul>
-    <div class="product-short-info"> <?= $productShortDescription; ?></div>
+    <div class="product-short-info"> <?= $productDescription; ?></div>
 </div>
