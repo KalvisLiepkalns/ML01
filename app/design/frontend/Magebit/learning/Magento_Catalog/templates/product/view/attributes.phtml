@@ -3,8 +3,10 @@
 use Magebit\ProductAttributeFilter\Helper\ProductAttributeFilter;
 use Magento\Catalog\Model\Product;
 
+
 /** @var ProductAttributeFilter $attributes */
 $attributes = $this->helper(ProductAttributeFilter::class);
+
 /** @var Product $product */
 $product = $attributes->getProduct();
 
