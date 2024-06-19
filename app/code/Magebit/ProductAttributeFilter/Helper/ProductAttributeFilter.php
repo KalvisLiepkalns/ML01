@@ -96,7 +96,7 @@ class ProductAttributeFilter extends AbstractHelper
     private function getCurrentProductId(): int
     {
         // Might not be the best, but it's one idea that came to my mind
-        return intval($this->request->getParam("id"));
+        return +$this->request->getParam("id");
     }
 
     /**

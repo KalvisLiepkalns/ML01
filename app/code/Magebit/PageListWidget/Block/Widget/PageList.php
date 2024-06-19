@@ -5,13 +5,13 @@ namespace Magebit\PageListWidget\Block\Widget;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Widget\Block\BlockInterface;
 
 class PageList extends Template implements BlockInterface
 {
-
     protected $_template = 'widget/page_list.phtml';
     protected PageRepositoryInterface $pageRepositoryInterface;
     protected SearchCriteriaBuilder $searchCriteriaBuilder;
@@ -22,6 +22,19 @@ class PageList extends Template implements BlockInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
 
         parent::__construct($context);
+    }
+
+    /**
+     * Simple string HTML tag maker.
+     * @param string $tag html tag type
+     * @param string ...$children passed down children
+     * @return string
+     */
+    private function html(string $tag, string ...$children): string
+    {
+        $startTag= $tag ? "<".$tag.">" : "";
+        $endTag= $tag ? "</".$tag.">" : "";
+        return $startTag . implode($children) . $endTag;
     }
 
     /**
@@ -44,7 +57,7 @@ class PageList extends Template implements BlockInterface
 
     /**
      * Get the widget title.
-     * @return stirng
+     * @return string
     */
     public function getTitle(): string
     {
@@ -52,15 +65,14 @@ class PageList extends Template implements BlockInterface
     }
 
     /**
-     * Get relevent CMS pages.
+     * Get relevant CMS pages.
      * @return PageInterface[]
+     * @throws LocalizedException
      */
-    private function getCmsPages()
+    private function getCmsPages(): array
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $pages = $this->pageRepositoryInterface->getList($searchCriteria)->getItems();
-
-        return $pages;
+        return $this->pageRepositoryInterface->getList($searchCriteria)->getItems();
     }
 
     /**
@@ -68,25 +80,27 @@ class PageList extends Template implements BlockInterface
      * @param PageInterface $page
      * @return string
      */
-    private function liLink(PageInterface $page) {
-        $link = "<a href='". $page->getIdentifier(). "'>". $page->getTitle(). "</a>";
-        return "<li>".$link. "</li>";
+    private function liLink(PageInterface $page): string
+    {
+        return $this->html(
+            "li",
+            "<a href='". $page->getIdentifier(). "'>". $page->getTitle(). "</a>"
+        );
     }
 
     /**
      * Returns HTML ul list of pages, depending on the display mode.
      * @return string
+     * @throws LocalizedException
      */
     private function getPageList(): string
     {
         $pages = $this->getCmsPages();
-        $html = "";
 
-        $html .= "<ul>";
-        $html .= $this->getDisplayMode() === "0" ? $this->getAllPages($pages) : $this->getSpecificPages($pages);
-        $html .= "</ul>";
-
-        return $html;
+        return $this->html(
+            "ul",
+            $this->getDisplayMode() === "0" ? $this->getAllPages($pages) : $this->getSpecificPages($pages)
+        );
     }
 
     /**
@@ -94,9 +108,8 @@ class PageList extends Template implements BlockInterface
      * @param PageInterface[] $pages
      * @return string
      */
-    private function getSpecificPages($pages): string
+    private function getSpecificPages(array $pages): string
     {
-
         $pageIds = explode(",", $this->getSelectedPages());
         $html = "";
 
@@ -116,7 +129,7 @@ class PageList extends Template implements BlockInterface
      * @param PageInterface[] $pages
      * @return string
      */
-    private function getAllPages($pages): string
+    private function getAllPages(array $pages): string
     {
         $html = "";
 
@@ -127,15 +140,15 @@ class PageList extends Template implements BlockInterface
         return $html;
     }
 
+    /**
+     * @throws LocalizedException
+     */
     public function toHtml(): string
     {
-        $html = "<div>";
-        $html .= "<h2>". $this->getTitle(). "</h2>";
-
-        $html .= $this->getPageList();
-
-        $html .= "</div>";
-
-        return $html;
+        return $this->html(
+            "div",
+            $this->html( "h2", $this->getTitle()),
+            $this->html( "", $this->getPageList())
+        );
     }
 }

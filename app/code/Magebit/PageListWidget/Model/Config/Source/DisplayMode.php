@@ -8,7 +8,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class DisplayMode implements OptionSourceInterface
 {
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             ['value' => '0', 'label' => __('All Pages')],

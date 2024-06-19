@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Magebit\PageListWidget\Model\Config\Source;
 
+use Exception;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -22,7 +23,7 @@ class CmsPages implements OptionSourceInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $options = [];
         $pages = $this->getPages();
@@ -39,9 +40,9 @@ class CmsPages implements OptionSourceInterface
 
     /**
      * Returns all CMS pages.
-     * @return PageInterface[]
+     * @return LocalizedException|Exception|PageInterface[]
      */
-    public function getPages()
+    public function getPages(): LocalizedException|Exception|array
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
         try {
