@@ -3,7 +3,6 @@
 use Magebit\ProductAttributeFilter\Helper\ProductAttributeFilter;
 use Magento\Catalog\Model\Product;
 
-
 /** @var ProductAttributeFilter $attributes */
 $attributes = $this->helper(ProductAttributeFilter::class);
 
@@ -13,16 +12,13 @@ $product = $attributes->getProduct();
 $productDescription = $product->getShortDescription() ? : $attributes->getDescription($product);
 $attributeList = $attributes->getFilteredAttributes($product);
 
-
 ?>
 
 <div class="product-attributes">
     <ul>
         <?php foreach ( $attributeList as $item): ?>
             <li>
-                <?php
-                    echo "<strong>" . $item->getStorelabel() . ":" . "&ensp;</strong>". $item->getFrontend()->getValue($product)
-                ?>
+                <?= "<strong>" . $item->getStorelabel() . ":" . "&ensp;</strong>". $item->getFrontend()->getValue($product) ?>
             </li>
         <?php endforeach; ?>
     </ul>

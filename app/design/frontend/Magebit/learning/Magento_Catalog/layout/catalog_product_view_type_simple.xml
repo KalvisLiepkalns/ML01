@@ -3,11 +3,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <link rel="stylesheet" type="text/css" src="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800" src_type="url" />
-        <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"> -->
     </head>
     <body>
         <referenceContainer name="page.wrapper">
-            <!-- <referenceBlock name="breadcrumbs" remove="true" /> -->
             <referenceBlock name="view.addto.wishlist" remove="true" />
             <referenceBlock name="view.addto.compare" remove="true" />
              <referenceBlock name="product.info.type" remove="true" />
@@ -21,7 +19,6 @@
         <referenceContainer name="product.info.main">
             <block name="attributes" template="Magento_Catalog::product/view/attributes.phtml" after="product.info.price"/>
             <referenceBlock name="product.info.details" remove="true" />
-            <!-- <move /> -->
         </referenceContainer>
 
 

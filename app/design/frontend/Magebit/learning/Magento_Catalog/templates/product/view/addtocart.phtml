@@ -1,14 +1,14 @@
 <?php
 
-$_product = $block->getProduct();
-$stock = $_product->getExtensionAttributes()->getStockItem()->getQty();
+$product = $block->getProduct();
+$stock = $product->getExtensionAttributes()->getStockItem()->getQty();
 $buttonTitle = "Add to Cart";
 
 ?>
 <div id="qty-id" data-bind="scope: 'qty-counter'">
     <!-- ko template: getTemplate() --><!-- /ko -->
     <?php if ($block->displayProductStockStatus()): ?>
-        <?php if ($_product->isAvailable()): ?>
+        <?php if ($product->isAvailable()): ?>
             <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
                 <span>
                     <svg

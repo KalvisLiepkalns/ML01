@@ -26,11 +26,11 @@ class PageList extends Template implements BlockInterface
 
     /**
      * Simple string HTML tag maker.
-     * @param string $tag html tag type
+     * @param ?string $tag html tag type
      * @param string ...$children passed down children
      * @return string
      */
-    private function html(string $tag, string ...$children): string
+    private function html(?string $tag, string ...$children): string
     {
         $startTag= $tag ? "<".$tag.">" : "";
         $endTag= $tag ? "</".$tag.">" : "";
@@ -147,8 +147,8 @@ class PageList extends Template implements BlockInterface
     {
         return $this->html(
             "div",
-            $this->html( "h2", $this->getTitle()),
-            $this->html( "", $this->getPageList())
+            $this->html("h2", $this->getTitle()),
+            $this->html(null, children: $this->getPageList())
         );
     }
 }
