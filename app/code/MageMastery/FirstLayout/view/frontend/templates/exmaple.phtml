@@ -1,0 +1,11 @@
+<?php
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\AbstractBlock;
+
+/** @var Escaper $escaper */
+/** @var AbstractBlock $block */
+?>
+<h1><?= $escaper->escapeHtml(__('My First Template')) ?></h1>
+<p><?= $escaper->escapeHTML(__('With Layout support')) ?></p>
+<p><?= $escaper->escapeHtml($block->getData('user')); ?></p>

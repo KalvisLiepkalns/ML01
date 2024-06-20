@@ -123,5 +123,4 @@ class ProductAttributeFilter extends AbstractHelper
         $description = strip_tags($description);
         return explode(".",$description)[0] . ".";
     }
-
 }
