@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <link rel="stylesheet" type="text/css" src="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800" src_type="url" />
@@ -8,27 +7,26 @@
         <referenceContainer name="page.wrapper">
             <referenceBlock name="view.addto.wishlist" remove="true" />
             <referenceBlock name="view.addto.compare" remove="true" />
-             <referenceBlock name="product.info.type" remove="true" />
+            <referenceBlock name="product.info.details" remove="true" />
+            <referenceBlock name="product.info.type" remove="true" />
+            <referenceBlock name="product.info.overview" remove="true"/>
         </referenceContainer>
 
-        <referenceBlock name="product.info.overview" remove="true"/>
         <move element="product.info.upsell" destination="product.info.main"/>
         <referenceBlock name="product.info.main">
         </referenceBlock>
 
         <referenceContainer name="product.info.main">
             <block name="attributes" template="Magento_Catalog::product/view/attributes.phtml" after="product.info.price"/>
-            <referenceBlock name="product.info.details" remove="true" />
         </referenceContainer>
-
 
         <referenceContainer name="page.wrapper" >
-            <referenceContainer name="main.content">
-                <container name="test" htmlTag="div" htmlClass="mt-80" before="-" />
+            <referenceContainer name="main.content" >
+                <container name="main-media-content" htmlTag="section" htmlClass="" before="-" />
+                <container name="test" htmlTag="div" htmlClass="related-products" after="main-media-content" />
             </referenceContainer>
         </referenceContainer>
-        <move element="catalog.product.related" destination="test" />
-
-
+        <move element="catalog.product.related" destination="test"/>
+        <move element="columns" destination="main-media-content"/>
     </body>
 </page>
