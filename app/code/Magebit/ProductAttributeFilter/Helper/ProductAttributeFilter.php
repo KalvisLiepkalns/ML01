@@ -5,52 +5,56 @@ namespace Magebit\ProductAttributeFilter\Helper;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute\Interceptor;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 class ProductAttributeFilter extends AbstractHelper
 {
-
+    /**
+     * @var CollectionFactory $attributeCollection
+     * @var ProductRepositoryInterface $attributeCollection
+     * @var Http $productRepository
+     */
     private CollectionFactory $attributeCollection;
     private ProductRepositoryInterface $productRepository;
     private Http $request;
 
-    // Base attributes that are priority
-    private array $baseAttributes = ["dimension", "color", "material"];
+    // Base attributes that are the priority
+    private const baseAttributes = ["dimension", "color", "material"];
 
-    public function __construct(Context $context, CollectionFactory $attributeCollection, Http $request, ProductRepositoryInterface $productRepository)
+
+    /**
+     * Product Attribute Filter Helper Initializer
+     * @param Context $context
+     * @param CollectionFactory $attributeCollection
+     * @param Http $request
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(
+        Context $context,
+        CollectionFactory $attributeCollection,
+        Http $request,
+        ProductRepositoryInterface $productRepository
+    )
     {
         parent::__construct($context);
         $this->attributeCollection = $attributeCollection;
         $this->request = $request;
         $this->productRepository = $productRepository;
-
-    }
-
-    /**
-     * Sets the attributes that are the priority in the view.
-     * @param string[] $attributes
-     * @return void \
-     * ``$attributes`` - example: ["color", "material", ...]
-     */
-    public function setBaseAttributes(array $attributes): void {
-        $this->baseAttributes = $attributes;
     }
 
     /**
      * Gets a valid attribute that is not included in ``$filteredAttributes``
      * @param Product $product - the current product
      * @param array $filteredAttributes
-     *
-     * @return null|Interceptor
+     * @return null|?Attribute
      */
-    private function getValidAttribute(Product $product, array $filteredAttributes): null|Interceptor
+    private function getValidAttribute(Product $product, array $filteredAttributes): null|Attribute
     {
-
         $otherAttributes = $this->attributeCollection->create();
         $otherAttributes->addFilter('is_user_defined', 1);
 
@@ -67,15 +71,15 @@ class ProductAttributeFilter extends AbstractHelper
     /**
      * Gets filtered attributes for the current product
      * @param Product $product - the current product.
-     * @return Interceptor[]
-     * Return example: ["Color" => Interceptor, "Material" => Interceptor, ...]
+     * @return Attribute[]
+     * Return example: ["Color" => Attribute, "Material" => Attribute, ...]
      */
     public function getFilteredAttributes(Product $product): array
     {
         $filteredAttributes = [];
         $attributes = $product->getAttributes();
 
-        foreach ($this->baseAttributes as $attributeIdentifier) {
+        foreach (self::baseAttributes as $attributeIdentifier) {
             $value = $attributes[$attributeIdentifier]->getFrontend()->getValue($product);
             $label = $attributes[$attributeIdentifier]->getStorelabel();
 
@@ -88,17 +92,14 @@ class ProductAttributeFilter extends AbstractHelper
 
         return $filteredAttributes;
     }
-
     /**
      * Gets the current id by taking it from the path info.
      * @return int
      */
     private function getCurrentProductId(): int
     {
-        // Might not be the best, but it's one idea that came to my mind
-        return +$this->request->getParam("id");
+        return (int)$this->request->getParam("id");
     }
-
     /**
      * Gets the current product.
      * @return ProductInterface
@@ -108,7 +109,6 @@ class ProductAttributeFilter extends AbstractHelper
     {
         return $this->productRepository->getById($this->getCurrentProductId());
     }
-
     /**
      * Gets the description of ``$product`` till it reaches the first dot.
      * @param Product $product

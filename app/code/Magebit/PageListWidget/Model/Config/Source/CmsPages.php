@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Magebit\PageListWidget\Model\Config\Source;
@@ -14,15 +13,28 @@ use Magento\Framework\Exception\LocalizedException;
 class CmsPages implements OptionSourceInterface
 {
 
-    private PageRepositoryInterface $pageRepositoryInterface;
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private PageRepositoryInterface $pageRepositoryInterface;
 
-    public function __construct(PageRepositoryInterface $pageRepositoryInterface, SearchCriteriaBuilder $searchCriteriaBuilder)
+    /**
+     * CMS Pages Initializer
+     * @param PageRepositoryInterface $pageRepositoryInterface
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     */
+    public function __construct(
+        PageRepositoryInterface $pageRepositoryInterface,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    )
     {
         $this->pageRepositoryInterface = $pageRepositoryInterface;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
+    /**
+     * Return array of options as value-label pairs of CMS Pages
+     *
+     * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     */
     public function toOptionArray(): array
     {
         $options = [];

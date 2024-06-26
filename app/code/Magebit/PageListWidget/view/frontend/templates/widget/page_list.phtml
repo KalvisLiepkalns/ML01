@@ -1,3 +1,26 @@
 <?php
-echo $block->toHtml();
+
+use Magebit\PageListWidget\Block\Widget\PageList;
+use Magento\Cms\Api\Data\PageInterface;
+
+/**
+ * @var PageList $block
+ * @var PageInterface[] $relevantPages
+ * @var string $title
+ */
+
+$relevantPages = $block->getPageList();
+$title = $block->getTitle();
+
 ?>
+
+<div>
+    <h2><?= $title ?></h2>
+    <ul>
+        <?php foreach ($relevantPages as $page): ?>
+        <li>
+            <a href="<?= $page->getIdentifier() ?>"><?= $page->getTitle() ?></a>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

@@ -18,7 +18,7 @@ $attributeList = $attributes->getFilteredAttributes($product);
     <ul>
         <?php foreach ( $attributeList as $item): ?>
             <li>
-                <?= "<strong>" . $item->getStorelabel() . ":" . "&ensp;</strong>". $item->getFrontend()->getValue($product) ?>
+                <strong><?= $item->getStorelabel() ?>: </strong> <?= $item->getFrontend()->getValue($product) ?>
             </li>
         <?php endforeach; ?>
     </ul>

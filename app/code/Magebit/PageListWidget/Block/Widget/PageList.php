@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Magebit\PageListWidget\Block\Widget;
 
@@ -12,11 +13,26 @@ use Magento\Widget\Block\BlockInterface;
 
 class PageList extends Template implements BlockInterface
 {
+    /**
+     * @var string $_template
+     * @var PageRepositoryInterface $pageRepositoryInterface
+     * @var SearchCriteriaBuilder $searchCriteriaBuilder
+     */
     protected $_template = 'widget/page_list.phtml';
-    protected PageRepositoryInterface $pageRepositoryInterface;
-    protected SearchCriteriaBuilder $searchCriteriaBuilder;
+    private PageRepositoryInterface $pageRepositoryInterface;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
-    public function __construct(PageRepositoryInterface $pageRepositoryInterface, SearchCriteriaBuilder $searchCriteriaBuilder, Context $context)
+    /**
+     * Page List Template Initializer
+     * @param PageRepositoryInterface $pageRepositoryInterface
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Context $context
+     */
+    public function __construct(
+        PageRepositoryInterface $pageRepositoryInterface,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        Context $context
+    )
     {
         $this->pageRepositoryInterface = $pageRepositoryInterface;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -25,25 +41,12 @@ class PageList extends Template implements BlockInterface
     }
 
     /**
-     * Simple string HTML tag maker.
-     * @param ?string $tag html tag type
-     * @param string ...$children passed down children
-     * @return string
-     */
-    private function html(?string $tag, string ...$children): string
-    {
-        $startTag= $tag ? "<".$tag.">" : "";
-        $endTag= $tag ? "</".$tag.">" : "";
-        return $startTag . implode($children) . $endTag;
-    }
-
-    /**
      * Returns display mode from widget ``Display Mode`` configuration.
-     * @return string "0" or "1"
+     * @return int 0 or 1
      */
-    public function getDisplayMode(): string
+    public function getDisplayMode(): int
     {
-        return $this->getData("display_mode");
+        return (int)$this->getData("display_mode");
     }
 
     /**
@@ -63,92 +66,50 @@ class PageList extends Template implements BlockInterface
     {
         return $this->getData("title");
     }
-
     /**
      * Get relevant CMS pages.
      * @return PageInterface[]
-     * @throws LocalizedException
      */
     private function getCmsPages(): array
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        return $this->pageRepositoryInterface->getList($searchCriteria)->getItems();
+        try {
+            return $this->pageRepositoryInterface->getList($searchCriteria)->getItems();
+        } catch (LocalizedException $e) {
+            $this->_logger->critical($e->getMessage());
+        }
+
+        return [];
     }
 
     /**
-     * Generates HTML li and link for passed down ``$page``.
-     * @param PageInterface $page
-     * @return string
+     * Returns PageInterface list depending on the display mode.
+     * @return PageInterface[]
      */
-    private function liLink(PageInterface $page): string
-    {
-        return $this->html(
-            "li",
-            "<a href='". $page->getIdentifier(). "'>". $page->getTitle(). "</a>"
-        );
-    }
-
-    /**
-     * Returns HTML ul list of pages, depending on the display mode.
-     * @return string
-     * @throws LocalizedException
-     */
-    private function getPageList(): string
+    public function getPageList(): array
     {
         $pages = $this->getCmsPages();
 
-        return $this->html(
-            "ul",
-            $this->getDisplayMode() === "0" ? $this->getAllPages($pages) : $this->getSpecificPages($pages)
-        );
+        return $this->getDisplayMode() ?
+            $this->getSpecificPages($pages) : $pages;
     }
 
     /**
-     * Returns HTML, li list of pages, depending on the display mode in Widget ``Specific Pages``.
+     * Returns only the selected pages.
      * @param PageInterface[] $pages
-     * @return string
+     * @return PageInterface[]
      */
-    private function getSpecificPages(array $pages): string
+    private function getSpecificPages(array $pages): array
     {
         $pageIds = explode(",", $this->getSelectedPages());
-        $html = "";
+        $filteredPages = [];
 
         foreach ($pageIds as $pageId) {
             foreach ($pages as $page) {
-                if ($pageId == $page->getId()) {
-                    $html .= $this->liLink($page);
-                }
+                if ($pageId == $page->getId()) $filteredPages[] = $page;
             }
         }
 
-        return $html;
-    }
-
-    /**
-     * Returns HTML, li list of cms pages, depending on the display mode in Widget ``All Pages``.
-     * @param PageInterface[] $pages
-     * @return string
-     */
-    private function getAllPages(array $pages): string
-    {
-        $html = "";
-
-        foreach ($pages as $page) {
-            $html .= $this->liLink($page);
-        }
-
-        return $html;
-    }
-
-    /**
-     * @throws LocalizedException
-     */
-    public function toHtml(): string
-    {
-        return $this->html(
-            "div",
-            $this->html("h2", $this->getTitle()),
-            $this->html(null, children: $this->getPageList())
-        );
+        return $filteredPages;
     }
 }
